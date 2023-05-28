@@ -6,6 +6,13 @@
       "altura": 174,
       "imc": 25.1,
       "condicao": "Sobrepeso"
+    },
+    {
+      "id": "3",
+      "peso": 75,
+      "altura": 174,
+      "imc": 24.9,
+      "condicao": "Normal"
     }
   ]
 }
