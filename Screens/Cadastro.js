@@ -6,25 +6,35 @@ import {useNavigation} from '@react-navigation/native';
 import Axios from 'axios';
 
 const Cadastro = () => {
-  const [peso, setPeso] = useState();
-  const [altura, setAltura] = useState();
-  const [imc, setImc] = useState();
+  const [peso, setPeso] = useState('0');
+  const [altura, setAltura] = useState('1.74');
+  const [imc, setImc] = useState(1);
   const [condicao, setCondicao] = useState('');
 
   const navigation = useNavigation();
 
-  const saveProduct = () => {
-    setImc(parseFloat(peso) / Math.sqrt(parseFloat(altura)));
-    if (imc < 18.5) {
-      setCondicao('Magreza');
-    } else if (imc > 30) {
-      setCondicao('Obesidade');
-    } else if (imc <= 30 && imc > 25) {
-      setCondicao('Sobrepeso');
-    } else {
-      setCondicao('Normal');
+  const calculateIMC = () => {
+    if (parseFloat(altura) !== 0) {
+      setImc(parseFloat(peso) / Math.pow(parseFloat(altura), 2));
+      if (imc < 18.5) {
+        setCondicao('Magreza');
+      } else if (imc > 30) {
+        setCondicao('Obesidade');
+      } else if (imc <= 30 && imc > 25) {
+        setCondicao('Sobrepeso');
+      } else {
+        setCondicao('Normal');
+      }
     }
-    console.log('IMCSaved: ' + imc + '. CondiçãoSaved: ' + condicao);
+    console.log(
+      'Altura: ' +
+        altura +
+        '. AlturaQuadrado: ' +
+        Math.pow(parseFloat(altura), 2),
+    );
+    console.log('imc: ' + imc + '. Condicao: ' + condicao);
+  };
+  const saveWeight = () => {
     Axios.post('http://192.168.0.2:3000/pesos', {
       peso: parseFloat(peso),
       altura: parseFloat(altura),
@@ -35,14 +45,24 @@ const Cadastro = () => {
         alert('Salvo com sucesso!');
         navigation.navigate('Home', {res});
       })
-      .catch(() => alert('Erro ao salvar'));
+      .catch(err => alert('Erro: ' + err));
+    console.log(
+      'Altura: ' +
+        altura +
+        '. AlturaQuadrado: ' +
+        Math.pow(parseFloat(altura), 2),
+    );
+    console.log('imc: ' + imc + '. Condicao: ' + condicao);
   };
 
   return (
     <View style={{padding: 20, alignItems: 'center'}}>
       <TextInput
         value={peso}
-        onChangeText={txt => setPeso(txt)}
+        onChangeText={txt => {
+          setPeso(txt);
+          calculateIMC();
+        }}
         placeholder="Peso"
         style={{
           fontSize: 16,
@@ -59,7 +79,10 @@ const Cadastro = () => {
 
       <TextInput
         value={altura}
-        onChangeText={txt => setAltura(txt)}
+        onChangeText={txt => {
+          setAltura(txt);
+          calculateIMC();
+        }}
         placeholder="Altura"
         style={{
           fontSize: 16,
@@ -74,7 +97,7 @@ const Cadastro = () => {
         placeholderTextColor="#5a5a5a"
       />
 
-      <Button title="Cadastrar" onPress={saveProduct} />
+      <Button title="Cadastrar" onPress={() => saveWeight()} />
     </View>
   );
 };

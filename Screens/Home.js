@@ -51,7 +51,7 @@ const Home = () => {
               <Text>Peso: {item.peso}</Text>
               <Text>Altura: {item.altura}</Text>
               <Text>IMC: {item.imc}</Text>
-              <Text>Condição: {item.condition}</Text>
+              <Text>Condição: {item.condicao}</Text>
             </View>
           </TouchableOpacity>
         )}

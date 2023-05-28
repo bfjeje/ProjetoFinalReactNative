@@ -8,7 +8,7 @@ import Axios from 'axios';
 const Editar = () => {
   const [peso, setPeso] = useState('');
   const [altura, setAltura] = useState('');
-  const [imc, setImc] = useState('');
+  const [imc, setImc] = useState();
   const [condicao, setCondicao] = useState();
   const [id, setId] = useState('');
 
@@ -22,13 +22,36 @@ const Editar = () => {
     setAltura(pesoObject.altura);
     setImc(pesoObject.imc);
     setCondicao(pesoObject.condicao);
+    console.log('condicao inicial: ' + pesoObject.condicao);
     setId(pesoObject.id);
   }, []);
 
+  function calculateIMC() {
+    if (parseFloat(altura) !== 0) {
+      setImc(parseFloat(peso) / Math.pow(parseFloat(altura), 2));
+      if (imc < 18.5) {
+        setCondicao('Magreza');
+      } else if (imc > 30) {
+        setCondicao('Obesidade');
+      } else if (imc <= 30 && imc > 25) {
+        setCondicao('Sobrepeso');
+      } else {
+        setCondicao('Normal');
+      }
+    }
+    console.log(
+      'Altura: ' +
+        altura +
+        '. AlturaQuadrado: ' +
+        Math.pow(parseFloat(altura), 2),
+    );
+    console.log('imc: ' + imc + '. Condicao: ' + condicao);
+  }
+
   const saveWeight = () => {
     Axios.patch('http://192.168.0.2:3000/pesos/' + id, {
-      peso: peso,
-      altura: altura,
+      peso: parseFloat(peso),
+      altura: parseFloat(altura),
       imc: imc,
       condicao: condicao,
     })
@@ -52,7 +75,10 @@ const Editar = () => {
     <View style={{padding: 20, alignItems: 'center'}}>
       <TextInput
         value={peso.toString()}
-        onChangeText={txt => setPeso(txt)}
+        onChangeText={txt => {
+          setPeso(txt);
+          calculateIMC();
+        }}
         placeholder="Peso"
         style={{
           fontSize: 16,
@@ -68,8 +94,11 @@ const Editar = () => {
       />
 
       <TextInput
-        value={(altura / 100).toString()}
-        onChangeText={txt => setAltura(txt)}
+        value={altura.toString()}
+        onChangeText={txt => {
+          setAltura(txt);
+          calculateIMC();
+        }}
         placeholder="Altura"
         style={{
           fontSize: 16,
@@ -84,7 +113,7 @@ const Editar = () => {
         placeholderTextColor="#5a5a5a"
       />
       <View style={{flexDirection: 'row'}}>
-        <Button title="Cadastrar" onPress={saveWeight} />
+        <Button title="Editar" onPress={saveWeight} />
         <Button title="Deletar" onPress={deleteWeight} />
       </View>
     </View>

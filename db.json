@@ -1,13 +1,6 @@
 {
   "pesos": [
     {
-      "id": "1",
-      "peso": 76,
-      "altura": 174,
-      "imc": 24.77,
-      "condicao": "Normal"
-    },
-    {
       "id": "2",
       "peso": 76,
       "altura": 174,
