@@ -15,17 +15,15 @@
     "@react-navigation/stack": "^6.3.16",
     "axios": "^1.4.0",
     "deprecated-react-native-prop-types": "^4.1.0",
+    "metro-config": "^0.76.5",
     "patch-package": "^7.0.0",
     "react": "18.2.0",
     "react-native": "0.71.8",
-    "react-native-fab": "^1.0.18",
     "react-native-gesture-handler": "^2.10.1",
     "react-native-image-picker": "^5.4.0",
     "react-native-reanimated": "^3.1.0",
     "react-native-safe-area-context": "^4.5.3",
-    "react-native-screens": "^3.20.0",
-    "react-native-svg": "^13.9.0",
-    "react-native-vector-icons": "^9.2.0"
+    "react-native-screens": "^3.20.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

@@ -1,75 +1,49 @@
-import React, {useState, useEffect} from 'react';
-import {
-  View,
-  TextInput,
-  TouchableOpacity,
-  Button,
-  Image,
-  Text,
-} from 'react-native';
-
-import {launchImageLibrary} from 'react-native-image-picker';
+import React, {useState} from 'react';
+import {View, TextInput, Button} from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
 
 import Axios from 'axios';
 
 const Cadastro = () => {
-  const [titulo, setTitulo] = useState('');
-  const [categoria, setCategoria] = useState('');
-  const [modelo, setModelo] = useState('');
-  const [quantidade, setQuantidade] = useState();
-  const [img, setImg] = useState('');
+  const [peso, setPeso] = useState();
+  const [altura, setAltura] = useState();
+  const [imc, setImc] = useState();
+  const [condicao, setCondicao] = useState('');
 
   const navigation = useNavigation();
 
   const saveProduct = () => {
-    if (titulo.trim() === '') {
-      alert('Titulo não pode estar vazio');
+    setImc(parseFloat(peso) / Math.sqrt(parseFloat(altura)));
+    if (imc < 18.5) {
+      setCondicao('Magreza');
+    } else if (imc > 30) {
+      setCondicao('Obesidade');
+    } else if (imc <= 30 && imc > 25) {
+      setCondicao('Sobrepeso');
     } else {
-      Axios.post('http://192.168.0.2:3000/products', {
-        titulo,
-        categoria,
-        modelo,
-        quantidade,
-        img,
-      })
-        .then(res => {
-          alert('Salvo com sucesso!');
-          navigation.navigate('Home', {res});
-        })
-        .catch(() => alert('Erro ao salvar'));
+      setCondicao('Normal');
     }
+    console.log('IMCSaved: ' + imc + '. CondiçãoSaved: ' + condicao);
+    Axios.post('http://192.168.0.2:3000/pesos', {
+      peso: parseFloat(peso),
+      altura: parseFloat(altura),
+      imc: parseFloat(imc),
+      condicao: condicao,
+    })
+      .then(res => {
+        alert('Salvo com sucesso!');
+        navigation.navigate('Home', {res});
+      })
+      .catch(() => alert('Erro ao salvar'));
   };
-
-  useEffect(() => {}, []);
 
   return (
     <View style={{padding: 20, alignItems: 'center'}}>
-      <Image
-        source={{uri: img ? img : null}}
-        style={{
-          width: 100,
-          height: 100,
-          borderRadius: 50,
-          borderColor: '#545454',
-          borderWidth: 1,
-        }}
-      />
-
-      <TouchableOpacity
-        onPress={() =>
-          launchImageLibrary({mediaType: 'photo'}, res => {
-            setImg(res.assets[0].uri);
-          })
-        }>
-        <Text>Carregar imagem</Text>
-      </TouchableOpacity>
-
       <TextInput
-        value={titulo}
-        onChangeText={txt => setTitulo(txt)}
-        placeholder="Titulo"
+        value={peso}
+        onChangeText={txt => setPeso(txt)}
+        placeholder="Peso"
         style={{
           fontSize: 16,
           marginTop: 10,
@@ -84,9 +58,9 @@ const Cadastro = () => {
       />
 
       <TextInput
-        value={categoria}
-        onChangeText={txt => setCategoria(txt)}
-        placeholder="Categoria"
+        value={altura}
+        onChangeText={txt => setAltura(txt)}
+        placeholder="Altura"
         style={{
           fontSize: 16,
           marginTop: 10,
@@ -96,38 +70,6 @@ const Cadastro = () => {
           padding: 10,
           borderRadius: 7,
           marginBottom: 10,
-        }}
-        placeholderTextColor="#5a5a5a"
-      />
-      <TextInput
-        value={modelo}
-        onChangeText={txt => setModelo(txt)}
-        placeholder="Modelo"
-        style={{
-          marginBottom: 50,
-          fontSize: 16,
-          marginTop: 10,
-          borderWidth: 1,
-          width: '100%',
-          height: 50,
-          padding: 10,
-          borderRadius: 7,
-        }}
-        placeholderTextColor="#5a5a5a"
-      />
-      <TextInput
-        value={quantidade}
-        onChangeText={txt => setQuantidade(txt)}
-        placeholder="Quantidade"
-        style={{
-          marginBottom: 50,
-          fontSize: 16,
-          marginTop: 10,
-          borderWidth: 1,
-          width: '100%',
-          height: 50,
-          padding: 10,
-          borderRadius: 7,
         }}
         placeholderTextColor="#5a5a5a"
       />
