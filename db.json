@@ -1,0 +1,20 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "titulo": "Celular",
+      "categoria": "Eletronico",
+      "modelo": "X10",
+      "quantidade": 10,
+      "img": "https://bludiode.com/37455-large_default/xiaomi-mi-12s-ultra-12-gb-512-gb-verde.jpg"
+    },
+    {
+      "id": "2",
+      "titulo": "TV",
+      "categoria": "Eletronico",
+      "modelo": "X10",
+      "quantidade": 10,
+      "img": "https://img.freepik.com/vetores-gratis/tv-vintage_23-2147503075.jpg?size=626&ext=jpg"
+    }
+  ]
+}
